@@ -49,12 +49,12 @@ body {
 
 
 </style>
-<table>
-  
-
-<tr>@section('title', '検索リスト')</tr>
- 
 @section('content')
+<table>
+<tr>@section('title', '検索リスト')</tr>
+
+@section('content')
+
 @if (count($errors) > 0)
  
     @foreach ($errors->all() as $error)
@@ -62,11 +62,14 @@ body {
     @endforeach
   
   @endif
-
+  <form action="/logout" method="post">
+    @csrf
   <td><button style="border-color:#ea553a; color:#ea553a;" onMouseOut="this.style.background='#ffffff';this.style.color='#ea553a';" onMouseOver="this.style.background='#ea553a';this.style.color='#ffffff';">ログアウト</button></td></tr>
-   <form action="/search" method="post">
+  </form>
+
+  <form action="/search" method="post">
         @csrf
-      <td><select class="search-form__item-select" name="tag_id">
+      <td><select class="search-form__item-select" name="tag_id" >
           
           
           <option></option>
@@ -87,37 +90,35 @@ body {
       <th>更新</th>
       <th>削除</th>
     </tr>
-   
-    <td class = "login_user">@if (Auth::check())
-  <p> {{$user->name . ' でログイン中'}}</p>
-@else
-@endif
-    
-
-   
+ 
+    @if ($user->id !== Auth::user()->id)
+    @endif
+ 
+  
+  
 </td> 
     
-
-
-
-      
-
 
       @foreach ($todos as $todo)
-      
-     <tr><td width="30px,">{{ $todo->created_at }}</td><td><select name="example">
-@foreach ($tags as $tag)<option>{{$tag->name}}</option>@endforeach
-</select>
-</td> 
+
+      <form action="update" method="post">
+      @csrf
+
+     <tr><td width="30px">{{ $todo->created_at }}</td><td><select name="tag_id" value = "{{ $todo ['tag_id']}}">
+     <option>{{ $todo['tag']['name'] }}</option>
+
+
+     @foreach ($tags as $tag)
+              <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option> 
+                @endforeach
+                
+            </select></td>
      
-    
-    <form action="/update" method="post">
-      @csrf     
       <td><input type="text" name="content" value="{{$todo->content}}"></td>
       <input type="hidden" name="id" value="{{$todo->id}}">
 
    
-  <td><button style= "border-color:#ff7f7f; color:#ff7f7f;"onMouseOut="this.style.background='#ffffff';this.style.color='#ff7f7f';" onMouseOver="this.style.background='#ff7f7f';this.style.color='#ffffff';">更新</button></td>
+  <td><button style= "border-color:#ff7f7f; color:#ff7f7f;"onMouseOut="this.style.background='#ffffff';this.style.color='#ff7f7f';" onMouseOver="this.style.background='#ff7f7f';this.style.color='#ffffff';" onClick=" hoge(); return false;">更新</button></td>
   
       </form>
       
@@ -125,7 +126,7 @@ body {
       <form action="/delete" method="post">
      @csrf
 <input type="hidden" name="id" value="{{$todo->id}}"></td>
-<td><button style="border-color:#7fffbf; color:#7fffbf;"onMouseOut="this.style.background='#ffffff';this.style.color='#7fffbf';" onMouseOver="this.style.background='#7fffbf';this.style.color='#ffffff';">削除</button>
+<td><button style="border-color:#7fffbf; color:#7fffbf;"onMouseOut="this.style.background='#ffffff';this.style.color='#7fffbf';" onMouseOver="this.style.background='#7fffbf';this.style.color='#ffffff';" onclick="location.href='/search'">削除</button>
 </td></form>
 </tr>
 

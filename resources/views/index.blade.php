@@ -85,7 +85,7 @@ body {
   <form action="/create" method="post">
         @csrf
      <tr><td><input type="text" size="60px," name="content" value="{{ old('content') }}">
-     <input type="text" name="user_id" value="{{'user_id' }}"></td>
+     <input type="hidden" name="user_id" value= "{{$user->id}}"></td>
      <input type="hidden" name="name" value="{{ old('name') }}"></td>
 
      <td><button style="border-color:#bf7fff; color:#bf7fff;" onMouseOut="this.style.background='#ffffff';this.style.color='#bf7fff';" onMouseOver="this.style.background='#bf7fff';this.style.color='#ffffff';">追加</button></td>
@@ -103,36 +103,34 @@ body {
       <tr>
       <th size= "20px">作成日</th>
       <th >タスク名</th>
+      <th>タグ</th>
       <th>更新</th>
       <th>削除</th>
     </tr>
 
-
+    
     @foreach ($todos as $todo)
       
        
-<form action="/update" method="post">
-     <tr><td width="30px,">{{ $todo->created_at }}</td><td>
-      <select name="tag_id" value="{{ $todo['tag_id'] }}">
-    
-<option>{{ $todo['tag']['name'] }}
+    <form action="/update" method="post">
+      @csrf
+
   
-</option>
-@foreach ($tags as $tag)
-              <option value="{{ $tag['id'] }}">{{ $tag['name'] }}
-
-              </option> 
-
-                @endforeach
-                @csrf
-                
-            </select>
-
-</td> 
-
-      <td><input type="text" name="content" value="{{ $todo['content'] }}">
+     <tr><td width="30px,">{{ $todo->created_at }}</td>
+     <td><input type="text" name="content" value="{{$todo->content}}">
       <input type="hidden" name="id" value="{{ $todo['id'] }}">
       </td>
+      <td><select name="tag_id">
+    
+<option  value="{{ $todo['tag_id'] }}">{{ $todo['tag']['name'] }}</option>
+@foreach ($tags as $tag)
+              <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option> 
+                @endforeach
+
+  </select>
+</td> 
+
+     
 
   <td><button style= "border-color:#ff7f7f; color:#ff7f7f;"onMouseOut="this.style.background='#ffffff';this.style.color='#ff7f7f';" onMouseOver="this.style.background='#ff7f7f';this.style.color='#ffffff';">更新</button></td>
 
@@ -140,7 +138,6 @@ body {
       
       
       <form action="/delete" method="post">
-      @method('DELETE')
       @csrf
 <input type="hidden" name="id" value="{{ $todo['id'] }}"></td>
 <td><button style="border-color:#7fffbf; color:#7fffbf;"onMouseOut="this.style.background='#ffffff';this.style.color='#7fffbf';" onMouseOver="this.style.background='#7fffbf';this.style.color='#ffffff';">削除</button>

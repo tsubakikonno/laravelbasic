@@ -15,8 +15,9 @@ class CreateTodosTable extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
-            $table->string('content', 20);
-            $table->foreignId('user_id')->constrained('users');
+            $table->string('content', 20);    
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             

@@ -40,7 +40,7 @@ class TodoController extends Controller
         public function delete(Request $request)
         {
           Todo::find($request->id)->delete();
-          return redirect('/');
+          return back();
           
         }
 
@@ -49,23 +49,19 @@ class TodoController extends Controller
         public function update(Request $request)
         {
        
-          $todo = $request->only(['content','tag_id']);
+          $todos = $request->only(['content','tag_id']);
 
-          Todo::find($request->id)->update($todo);
-          return redirect('/');
-         
-
-
-          $tag = $request->only(['name']);
-
-          Tag::find($request->id)->update($tag);
-          return redirect('/');
+          Todo::with('tag')->find($request->id)->update($todos);
+          
+          return back()->with(compact('todos'));
         }
 
         public function search(Request $request)
   {
+    if (!isset($keyword))
     $user = Auth::user();
-    $todos = Todo::with('tag')->categorySearch($request->tag_id)->keywordSearch($request->keyword)->get();
+    $todos = Todo::with('tag')->categorySearch($request->tag_id)->where('content','LIKE',"%{$request->keyword}%")
+    ->where('user_id', \Auth::user()->id)->get();
     $tags = tag::all();
 
     return view('index', compact('todos', 'tags','user'));
@@ -77,7 +73,7 @@ class TodoController extends Controller
        {
         $user = Auth::user();
         $tags = Tag::all();
-        $todos = [];
+        $todos = Todo::where('user_id')->get();
       
         return view('search',  compact('todos', 'tags','user'));
       

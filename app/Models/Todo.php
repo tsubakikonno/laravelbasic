@@ -19,9 +19,9 @@ class Todo extends Model
 
     public function user()
     {
-      return $this->BelongsTo(User::class);
+      
+      return $this->BelongsTo('App\User');
     }
-
 
     public function scopeCategorySearch($query, $tag_id)
     {
@@ -30,11 +30,5 @@ class Todo extends Model
       }
     }
     
-    public function scopeKeywordSearch($query, $keyword)
-    {
-      if (!empty($keyword)) {
-        $query->where('content', 'like', '%' . $keyword . '%');
-      }
-    }
-    
-    }
+
+  }
