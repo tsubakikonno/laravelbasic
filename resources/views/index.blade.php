@@ -14,11 +14,6 @@ body {
  
   }
 
-  tr{
-
-  }
-
-
   th {
       color: Black;
       font-size: 20px;
