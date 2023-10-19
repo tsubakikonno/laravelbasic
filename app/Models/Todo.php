@@ -10,8 +10,7 @@ class Todo extends Model
     use HasFactory;
     
     protected $fillable = ['content','tag_id','user_id'];
-    protected $guarded = ['id'];
-
+    protected $guarded = ['id'
     public function  tag()
     {
       return $this->BelongsTo(Tag::class);

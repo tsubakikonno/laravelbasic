@@ -18,4 +18,4 @@ Route::post('/search', [TodoController::class, 'search']);
 
 Route::post('/logout', [TodoController::class, 'destroy']);
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php
